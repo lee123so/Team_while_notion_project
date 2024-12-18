@@ -32,10 +32,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("문서 삭제 성공");
       await renderSidebar();
 
-      // 삭제된 문서가 현재 문서라면 다른 문서를 불러오거나 기본 화면을 보여줌
-      const currentDocElement = document.querySelector(`[data-id="${docId}"]`);
-      if (currentDocElement) {
-        currentDocElement.remove();
+      // 문서가 삭제 될때 main textarea 도 같이 삭제 되게 
+      const titleBox = document.querySelector(".main h2");
+      if (titleBox && titleBox.dataset.id === docId) {
+        contentArea.innerHTML = `
+          <div class="welcome_box">
+            <p>문서를 선택하거나 새 문서를 생성하세요.</p>
+          </div>
+        `;
       }
     } catch (error) {
       console.error("문서 삭제 중 오류 발생:", error);
@@ -105,8 +109,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // 사이드바 클릭 시 해당 문서 내용 렌더링
-  document.querySelector('.menu ul').addEventListener('click', (event) => {
-    const menuBox = event.target.closest('.menu_box');
+  document.querySelector(".menu ul").addEventListener("click", (event) => {
+    const menuBox = event.target.closest(".menu_box");
     if (menuBox) {
       const docId = menuBox.dataset.id;
       if (docId) {
