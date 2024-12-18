@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 제목 및 내용 렌더링
     titleBox.contentEditable = true;
     titleBox.textContent = currentDoc.title || "제목 없음";
-    contentArea.innerHTML = `
+    contentArea.innerHTML = ` 
       <textarea>${currentDoc.content || ""}</textarea>
     `;
 
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
         await saveDocument(docId, updatedDoc);
         updateSidebarTitle(docId, titleBox.textContent.trim());
-      }, 5000); // 일단 5초뒤? 저장..
+      }, 5000); // 5초 뒤 저장
     };
 
     // 제목 및 내용 변경 이벤트 추가
@@ -120,6 +120,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("새 문서 생성:", newDoc);
       renderSidebar();
       renderEditor(newDoc.id);
+    }
+  });
+
+  // 사이드바 클릭 시 해당 문서 내용 렌더링
+  document.querySelector('.menu ul').addEventListener('click', (event) => {
+    const docId = event.target.closest('.menu_box')?.dataset.id;
+    if (docId) {
+      renderEditor(docId);
     }
   });
 
