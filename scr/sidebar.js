@@ -1,10 +1,6 @@
-const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
-const HEADERS = {
-  "Content-Type": "application/json",
-  "x-username": "namedaf",
-};
+// sidebar.js
+import { API_BASE_URL, HEADERS } from "./event.js";
 
-// DOM 요소 가져오기
 const menuList = document.querySelector(".menu ul");
 
 const updateSidebarTitle = (docId, newTitle) => {
