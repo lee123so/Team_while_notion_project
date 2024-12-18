@@ -1,5 +1,6 @@
 // event.js
 
+import { navigateTo } from "./router.js";
 import { renderSidebar, updateSidebarTitle } from "./sidebar.js";
 
 const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
@@ -78,8 +79,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 문서 내용 렌더링
   const renderEditor = async (docId) => {
+    
     const currentDoc = await fetchDocumentById(docId);
-
+   
     if (!currentDoc) {
       titleBox.textContent = "문서를 찾을 수 없습니다.";
       contentArea.innerHTML = "<p>내용 없음</p>";
@@ -124,11 +126,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // 사이드바 클릭 시 해당 문서 내용 렌더링
-  document.querySelector('.menu ul').addEventListener('click', (event) => {
+  document.querySelector('.menu ul').addEventListener('click', async(event) => {
     const docId = event.target.closest('.menu_box')?.dataset.id;
-    if (docId) {
-      renderEditor(docId);
-    }
+    console.log(docId);
+    await navigateTo(docId,`/post/${docId}`)
+    // if (docId) {
+    //   renderEditor(docId);
+    // }
   });
 
   // 초기화 실행

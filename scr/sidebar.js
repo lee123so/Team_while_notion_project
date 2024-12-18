@@ -72,7 +72,7 @@ const renderSidebar = async () => {
       });
 
       // 기존 클릭 이벤트 유지
-      listItem.addEventListener('click', () => renderEditor(doc.id));
+      // listItem.addEventListener('click', () => renderEditor(doc.id));
       menuList.appendChild(listItem);
     });
   } catch (error) {
