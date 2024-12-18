@@ -8,14 +8,11 @@ const HEADERS = {
 
 // DOM 요소 가져오기
 document.addEventListener("DOMContentLoaded", async () => {
-  const titleBox = document.querySelector(".title_box h2");
   const contentArea = document.querySelector(".main");
   const addPageButton = document.querySelector(".add_box");
   const welcomeBox = document.querySelector(".welcome_box");
 
-  console.log(titleBox, contentArea, addPageButton, welcomeBox); // 확인용 로그
-
-  if (!titleBox || !contentArea || !addPageButton || !welcomeBox) {
+  if (!contentArea || !addPageButton || !welcomeBox) {
     console.error("필수 DOM 요소를 찾을 수 없습니다.");
     return;
   }
@@ -33,13 +30,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       console.log("문서 삭제 성공");
-      // 사이드바 갱신
-      await renderSidebar(); 
+      await renderSidebar();
 
-      // 삭제된 문서가 현재 문서라면, 다른 문서를 불러오거나 기본 화면을 보여줌
-      if (titleBox.dataset.id === docId) {
-        titleBox.textContent = "문서를 찾을 수 없습니다.";
-        contentArea.innerHTML = "<p>내용 없음</p>";
+      // 삭제된 문서가 현재 문서라면 다른 문서를 불러오거나 기본 화면을 보여줌
+      const currentDocElement = document.querySelector(`[data-id="${docId}"]`);
+      if (currentDocElement) {
+        currentDocElement.remove();
       }
     } catch (error) {
       console.error("문서 삭제 중 오류 발생:", error);
@@ -51,21 +47,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentDoc = await fetchDocumentById(docId);
 
     if (!currentDoc) {
-      titleBox.textContent = "문서를 찾을 수 없습니다.";
-      contentArea.innerHTML = "<p>내용 없음</p>";
+      contentArea.innerHTML = "<p>문서를 찾을 수 없습니다.</p>";
       return;
     }
 
-    // 제목 및 내용 렌더링
+    // 새 제목 박스를 만들어서 문서 ID를 데이터로 추가
+    const titleBox = document.createElement("h2");
     titleBox.contentEditable = true;
     titleBox.textContent = currentDoc.title || "제목 없음";
-    contentArea.innerHTML = ` 
-      <textarea>${currentDoc.content || ""}</textarea>
-    `;
+    titleBox.dataset.id = docId;
 
-    const textarea = contentArea.querySelector("textarea");
+    // 새 텍스트 영역을 만들어서 문서 내용 넣기
+    const textarea = document.createElement("textarea");
+    textarea.textContent = currentDoc.content || "";
+
+    contentArea.innerHTML = "";
+    contentArea.appendChild(titleBox);
+    contentArea.appendChild(textarea);
+
     let saveTimeout;
-
     const autoSave = () => {
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(async () => {
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 트래시 아이콘 클릭 시 문서 삭제
   document.querySelector(".side_icon").addEventListener("click", async () => {
-    const docId = titleBox.dataset.id; // 제목 박스에 저장된 문서 ID
+    const docId = document.querySelector(".main h2")?.dataset.id;
     if (docId) {
       const confirmDelete = confirm("정말로 이 문서를 삭제하시겠습니까?");
       if (confirmDelete) {
