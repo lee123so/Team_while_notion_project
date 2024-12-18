@@ -1,4 +1,3 @@
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -83,14 +82,7 @@ table {
     transition-timing-function: ease;
     transition-property: width;
 }
-.content {
-    order: 3;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    overflow: hidden;
-    isolation: auto;
-}
+
 .logo{
     display: flex;
     height: 32px;
@@ -169,9 +161,6 @@ i{
 }
 .content{
     order: 3;
-    display: flex
-;
-    flex-direction: column;
     width: 100%;
     overflow: hidden;
     isolation: auto;
@@ -264,3 +253,96 @@ i{
     font-size: 14px;
     color: rgb(155, 155, 155);
 }
+.menu ul li{
+    position: relative;
+}
+.sub_menu_box{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.main{
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    
+}
+.welcome_box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.welcome_box >div{
+    display: flex;
+    align-items: center;
+}
+.welcome_box img{
+    width: 400px;
+}
+
+.welcome_box h2{
+    font-size: 40px;
+}
+.welcome_text_box{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.welcome_text_box p{
+    color: #444;
+}
+.welcome_text_box h2{
+    font-weight: 900;
+}
+
+
+/* 사용자 입력 박스 사이즈  */
+
+
+.title_box h2 {
+    font-size: 24px; /* 글자 크기 */
+    padding: 10px;
+    margin: 0;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+  }
+  
+  /* 메인 텍스트 에어리어 스타일 */
+  .main textarea {
+    width: 100%;
+    height: calc(100vh - 250px); /* 화면 크기에 비례 */
+    padding: 15px;
+    font-size: 20px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none; /* 크기 조정 비활성화 */
+    outline: none;
+    margin-top: 30px;  /* 글자 입력란 부분 높이 수정 */
+  }
+ /* 선택시 메인 텍스트 변경 */
+  .main textarea:focus {
+    border-color: #007bff; /* 클릭 시 테두리 색 변경 */
+    border-width: 2px;
+  }
+  
+  /* 사이드바 스타일 */
+  .menu ul {
+    max-height: calc(100vh - 100px); /* 사이드바 높이 제한 */
+    overflow-y: auto; /* 스크롤 활성화 */
+  }
+
+  /* 세 페이지 입력란 */
+  h2 {
+    font-size: 24px;
+    padding: 22px; 
+    border: 1px solid #ccc; /* 선택 사항: 테두리 추가 */
+    border-radius: 5px; /* 선택 사항: 모서리를 둥글게 */
+    box-sizing: border-box; /* 패딩 포함 폭 계산 */
+  }
+ 
