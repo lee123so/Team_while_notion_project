@@ -1,8 +1,9 @@
 // event.js
+
 import { renderSidebar, updateSidebarTitle } from "./sidebar.js";
 
-export const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
-export const HEADERS = {
+const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
+const HEADERS = {
   "Content-Type": "application/json",
   "x-username": "namedaf", // 고유한 사용자?
 };
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
         await saveDocument(docId, updatedDoc);
         updateSidebarTitle(docId, titleBox.textContent.trim());
-      }, 5000); // 5초뒤 저장
+      }, 5000); // 일단 5초뒤? 저장..
     };
 
     // 제목 및 내용 변경 이벤트 추가
@@ -117,13 +118,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newDoc = await createDocument("새 페이지");
     if (newDoc) {
       console.log("새 문서 생성:", newDoc);
-      renderSidebar(); // 사이드바 리렌더링
-      renderEditor(newDoc.id); // 새 문서 내용 표시
+      renderSidebar();
+      renderEditor(newDoc.id);
     }
   });
 
   // 초기화 실행
-  await renderSidebar(); // 사이드바 렌더링
+  await renderSidebar();
 
   // 첫 번째 문서를 기본 문서로 렌더링
   const response = await fetch(`${API_BASE_URL}`, { headers: HEADERS });
