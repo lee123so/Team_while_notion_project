@@ -118,8 +118,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newDoc = await createDocument("새 페이지");
     if (newDoc) {
       console.log("새 문서 생성:", newDoc);
-      renderEditor(newDoc.id); // 새로 생성된 문서 렌더링
-      await renderSidebar(); // 사이드바를 새로 렌더링
+      renderSidebar();
+      renderEditor(newDoc.id);
     }
   });
 

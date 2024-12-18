@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 const ENDPOINT_URL = "https://kdt-api.fe.dev-cos.com/documents";
 
 // 공통 Headers
@@ -12,8 +12,9 @@ const api = {
   // Root Documents 가져오기
   async getRootDocuments() {
     try {
-      const response = await axios.get(ENDPOINT_URL, { // 요청 헤더
-        headers
+      const response = await axios.get(ENDPOINT_URL, {
+        // 요청 헤더
+        headers,
       });
       console.log(response.data); // Axios response.data로 응답 데이터에 접근
       return response.data;
@@ -27,7 +28,7 @@ const api = {
   async getDocument(id) {
     try {
       const response = await axios.get(`${ENDPOINT_URL}/${id}`, {
-        headers
+        headers,
       });
       console.log(response.data);
       return response.data;
@@ -42,10 +43,10 @@ const api = {
     try {
       const body = {
         title,
-        parent
+        parent,
       }; // 생성할 데이터
       const response = await axios.post(ENDPOINT_URL, body, {
-        headers
+        headers,
       });
       console.log(response.data);
       return response.data;
@@ -60,7 +61,7 @@ const api = {
     try {
       const body = {
         title,
-        content
+        content,
       }; // 수정할 데이터
       const response = await axios.put(`${ENDPOINT_URL}/${id}`, body, {
         headers,
@@ -77,7 +78,7 @@ const api = {
   async deleteDocument(id) {
     try {
       const response = await axios.delete(`${ENDPOINT_URL}/${id}`, {
-        headers
+        headers,
       });
       console.log(`Document ${id} deleted`);
     } catch (error) {

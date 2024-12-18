@@ -1,5 +1,3 @@
-// sidebar.js
-
 const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
 const HEADERS = {
   "Content-Type": "application/json",
