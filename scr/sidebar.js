@@ -36,21 +36,31 @@ const renderSidebar = async () => {
       const deleteIcon = listItem.querySelector(".delete_icon");
       deleteIcon.addEventListener("click", async (e) => {
         e.stopPropagation(); // 클릭 이벤트 전파 막기
-        const docId = doc.id;
         const confirmDelete = confirm("정말로 이 문서를 삭제하시겠습니까?");
         if (confirmDelete) {
-          await deleteDocument(docId); // 문서 삭제
+          await deleteDocument(doc.id); // 문서 삭제
         }
       });
 
-      // 사이드바 항목 클릭 시 해당 문서 렌더링
-      listItem.addEventListener("click", () => renderEditor(doc.id));
       menuList.appendChild(listItem);
     });
   } catch (error) {
     console.error("사이드바 렌더링 중 오류 발생:", error);
   }
 };
+
+// 사이드바 항목 클릭 이벤트 (전역 리스너)
+menuList.addEventListener("click", (event) => {
+  const menuBox = event.target.closest(".menu_box");
+  if (menuBox) {
+    const docId = menuBox.dataset.id;
+    if (docId) {
+      renderEditor(docId);
+    } else {
+      console.error("문서 ID가 없습니다.");
+    }
+  }
+});
 
 // 문서 제목 업데이트
 const updateSidebarTitle = (docId, newTitle) => {
@@ -76,12 +86,16 @@ const deleteDocument = async (docId) => {
 
     console.log("문서 삭제 성공");
     await renderSidebar(); // 사이드바 갱신
-    // 삭제된 문서가 현재 문서라면, 다른 문서를 불러오거나 기본 화면을 보여줌
-    const titleBox = document.querySelector(".title_box h2");
-    const contentArea = document.querySelector(".main");
-    if (titleBox.dataset.id === docId) {
-      titleBox.textContent = "문서를 찾을 수 없습니다.";
-      contentArea.innerHTML = "<p>내용 없음</p>";
+
+    // 삭제된 문서가 현재 열려있는 문서라면, 기본 화면으로 전환
+    const titleBox = document.querySelector(".main h2");
+    if (titleBox && titleBox.dataset.id === String(docId)) {
+      const contentArea = document.querySelector(".main");
+      contentArea.innerHTML = `
+        <div class="welcome_box">
+          <p>문서를 선택하거나 새 문서를 생성하세요.</p>
+        </div>
+      `;
     }
   } catch (error) {
     console.error("문서 삭제 중 오류 발생:", error);
