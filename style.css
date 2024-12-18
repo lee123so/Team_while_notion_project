@@ -66,6 +66,7 @@ table {
     cursor: text;
 }
 .side_bar {
+    position: relative;
     height: 100%;
     order: 1;
     flex-grow: 0;
@@ -100,6 +101,9 @@ table {
     font-size: 14px;
     text-overflow: ellipsis;
     line-height: 20px;
+}
+.menu{
+    position: relative;
 }
 .menu ul{
     flex-grow: 0;
@@ -295,4 +299,17 @@ i{
 }
 .welcome_text_box h2{
     font-weight: 900;
+}
+.toggle_menu{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: -35px;
+    top: 0;
+    border-radius: 0 7px 7px 0px;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
