@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notion</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://kit.fontawesome.com/46f772db8c.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- 지워도 될것? -->
+  <script type="module" src="/scr/event.js"></script>
+
+<body>
+  <div class="container">
+    <div class="inner">
+      <nav class="side_bar">
+        <div class="logo">
+          <h1>🌼 이희수의 Notion</h1>
+        </div>
+        <!-- 메뉴  -->
+        <div class="menu">
+          <ul>
+            <li>
+              <div class="menu_box">
+                <div class="icon"></div>
+                <div class="menu_text">추가</div>
+              </div>
+            </li>
+            <li>
+              <div class="menu_box">
+                <div class="icon">
+                  <i class="fa-duotone fa-solid fa-angle-right"></i>
+                </div>
+                <div class="menu_text">글자</div>
+              </div>
+            </li>
+          </ul>
+          <div class="add_content_box">
+            <div class="add_box">
+              <div><i class="fa-solid fa-plus"></i></div>
+              <div class="add_box_text">새 페이지</div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="content">
+        <!-- 헤더 -->
+        <header class="header">
+          <div>
+            <div class="header_box">
+              <div class="title_box">
+                <div>🖥️</div>
+                <h2>안녕하세요</h2>
+              </div>
+              <div class="side_icon"><i class="fa-solid fa-trash"></i></div>
+            </div>
+          </div>
+        </header>
+        <main class="main">
+          <div class="welcome_box">
+            <div>
+              <div class="welcome_img_box"><img src="./assets/undraw_posts_kv5v.svg" alt=""></div>
+              <div class="welcome_text_box">
+                <h2>Welcome to Notion!</h2>
+                <p>처음오셨다면 첫 게시물을 작성해주세요:) </p>
+              </div>
+
+            </div>
+        </main>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
