@@ -1,0 +1,45 @@
+======================== HTML 코드 =================================
+
+//하위메뉴
+
+      <ul class="sub_menu_box">
+                    <li>
+                        <div class="icon">
+                            <i class="fa-duotone fa-solid fa-angle-right"></i>
+                          </div>
+                          <div class="menu_text">하위메뉴</div>
+                    </li>
+       </ul>
+
+//네비 바
+
+<nav class="side_bar">
+          <div class="logo">
+            <h1>🌼 이희수의 Notion</h1>
+          </div>
+          <!-- 메뉴  -->
+          <div class="menu">
+            <ul>
+              <li>
+                <div class="menu_box">
+                  <div class="icon"></div>
+                  <div class="menu_text">추가</div>
+                </div>
+              </li>
+              <li>
+                <div class="menu_box">
+                  <div class="icon">
+                    <i class="fa-duotone fa-solid fa-angle-right"></i>
+                  </div>
+                  <div class="menu_text">글자</div>
+                </div>
+              </li>
+            </ul>
+            <div class="add_content_box">
+              <div class="add_box">
+                <div><i class="fa-solid fa-plus"></i></div>
+                <div class="add_box_text">새 페이지</div>
+              </div>
+            </div>
+          </div>
+        </nav>
