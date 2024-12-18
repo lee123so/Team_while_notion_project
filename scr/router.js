@@ -11,7 +11,7 @@ const no_content = `
 `
 const path_name = window.location.pathname
 
-const path = {
+const routes = {
     "/": () => "<h1>Home Page</h1><p>Welcome to the Home Page!</p>",
   "/about": () => "<h1>About Page</h1><p>This is the About Page.</p>",
   "/contact": () => "<h1>Contact Page</h1><p>Get in touch with us here.</p>",
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => WelcomePageRender());
 
 const router = () =>{
     
-    const route = path["/about"];
+    const route = routes[path_name];
     console.log(route)
     const content = document.getElementsByClassName('.main');
     content.innerHTML = route ? route() : "<h1>404 Not Found</h1><p>Page not found.</p>";

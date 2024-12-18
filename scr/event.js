@@ -135,9 +135,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await renderSidebar();
 
   // 첫 번째 문서를 기본 문서로 렌더링
-  const response = await fetch(`${API_BASE_URL}`, { headers: HEADERS });
-  const documents = await response.json();
-  if (documents.length > 0) {
-    renderEditor(documents[0].id);
-  }
+  // const response = await fetch(`${API_BASE_URL}`, { headers: HEADERS });
+  // const documents = await response.json();
+  // if (documents.length > 0) {
+  //   renderEditor(documents[0].id);
+  // }
 });
