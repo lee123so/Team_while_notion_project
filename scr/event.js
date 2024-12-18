@@ -1,19 +1,22 @@
-const API_BASE_URL = 'https://kdt-api.fe.dev-cos.com/documents';
+// event.js
+
+import { renderSidebar, updateSidebarTitle } from "./sidebar.js";
+
+const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
 const HEADERS = {
-  'Content-Type': 'application/json',
-  'x-username': 'namedaf', // 고유한 사용자?
+  "Content-Type": "application/json",
+  "x-username": "namedaf", // 고유한 사용자?
 };
 
 // DOM 요소 가져오기
-document.addEventListener('DOMContentLoaded', async () => {
-  const titleBox = document.querySelector('.title_box h2');
-  const contentArea = document.querySelector('.main');
-  const menuList = document.querySelector('.menu ul');
-  const addPageButton = document.querySelector('.add_box');
+document.addEventListener("DOMContentLoaded", async () => {
+  const titleBox = document.querySelector(".title_box h2");
+  const contentArea = document.querySelector(".main");
+  const addPageButton = document.querySelector(".add_box");
 
   // DOM 요소 확인
-  if (!titleBox || !contentArea || !menuList || !addPageButton) {
-    console.error('필수 DOM 요소를 찾을 수 없습니다.');
+  if (!titleBox || !contentArea || !addPageButton) {
+    console.error("필수 DOM 요소를 찾을 수 없습니다.");
     return;
   }
 
@@ -21,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fetchDocumentById = async (documentId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${documentId}`, {
-        method: 'GET',
+        method: "GET",
         headers: HEADERS,
       });
 
@@ -31,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       return await response.json();
     } catch (error) {
-      console.error('문서 조회 중 오류 발생:', error);
+      console.error("문서 조회 중 오류 발생:", error);
       return null;
     }
   };
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const saveDocument = async (documentId, updatedDoc) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${documentId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: HEADERS,
         body: JSON.stringify(updatedDoc),
       });
@@ -48,27 +51,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error(`문서 저장 실패 (ID: ${documentId})`);
       }
 
-      console.log('자동 저장 완료:', await response.json());
+      console.log("자동 저장 완료:", await response.json());
     } catch (error) {
-      console.error('문서 저장 중 오류 발생:', error);
+      console.error("문서 저장 중 오류 발생:", error);
     }
   };
 
   const createDocument = async (title) => {
     try {
       const response = await fetch(API_BASE_URL, {
-        method: 'POST',
+        method: "POST",
         headers: HEADERS,
         body: JSON.stringify({ title, parent: null }),
       });
 
       if (!response.ok) {
-        throw new Error('문서 생성 실패');
+        throw new Error("문서 생성 실패");
       }
 
       return await response.json();
     } catch (error) {
-      console.error('문서 생성 중 오류 발생:', error);
+      console.error("문서 생성 중 오류 발생:", error);
       return null;
     }
   };
@@ -78,19 +81,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentDoc = await fetchDocumentById(docId);
 
     if (!currentDoc) {
-      titleBox.textContent = '문서를 찾을 수 없습니다.';
-      contentArea.innerHTML = '<p>내용 없음</p>';
+      titleBox.textContent = "문서를 찾을 수 없습니다.";
+      contentArea.innerHTML = "<p>내용 없음</p>";
       return;
     }
 
     // 제목 및 내용 렌더링
     titleBox.contentEditable = true;
-    titleBox.textContent = currentDoc.title || '제목 없음';
+    titleBox.textContent = currentDoc.title || "제목 없음";
     contentArea.innerHTML = `
-      <textarea>${currentDoc.content || ''}</textarea>
+      <textarea>${currentDoc.content || ""}</textarea>
     `;
 
-    const textarea = contentArea.querySelector('textarea');
+    const textarea = contentArea.querySelector("textarea");
     let saveTimeout;
 
     const autoSave = () => {
@@ -106,58 +109,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     // 제목 및 내용 변경 이벤트 추가
-    titleBox.addEventListener('input', autoSave);
-    textarea.addEventListener('input', autoSave);
-  };
-
-  // 사이드바 제목 업데이트
-  const updateSidebarTitle = (docId, newTitle) => {
-    const sidebarItem = menuList.querySelector(`.menu_box[data-id="${docId}"] .menu_text`);
-    if (sidebarItem) {
-      sidebarItem.textContent = newTitle || '제목 없음';
-    }
-  };
-
-  // 사이드바 렌더링
-  const renderSidebar = async () => {
-    menuList.innerHTML = '';
-
-    try {
-      const response = await fetch(API_BASE_URL, {
-        method: 'GET',
-        headers: HEADERS,
-      });
-
-      if (!response.ok) {
-        throw new Error('문서 목록 조회 실패');
-      }
-
-      const documents = await response.json();
-
-      documents.forEach((doc) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-          <div class="menu_box" data-id="${doc.id}">
-            <div class="icon"><i class="fa-duotone fa-solid fa-angle-right"></i></div>
-            <div class="menu_text">${doc.title || '제목 없음'}</div>
-          </div>
-        `;
-
-        listItem.addEventListener('click', () => renderEditor(doc.id));
-        menuList.appendChild(listItem);
-      });
-    } catch (error) {
-      console.error('사이드바 렌더링 중 오류 발생:', error);
-    }
+    titleBox.addEventListener("input", autoSave);
+    textarea.addEventListener("input", autoSave);
   };
 
   // 새 문서 생성 버튼 처리
-  addPageButton.addEventListener('click', async () => {
-    const newDoc = await createDocument('새 페이지');
+  addPageButton.addEventListener("click", async () => {
+    const newDoc = await createDocument("새 페이지");
     if (newDoc) {
-      console.log('새 문서 생성:', newDoc);
-      renderSidebar();
-      renderEditor(newDoc.id);
+      console.log("새 문서 생성:", newDoc);
+      renderEditor(newDoc.id); // 새로 생성된 문서 렌더링
+      await renderSidebar(); // 사이드바를 새로 렌더링
     }
   });
 
