@@ -1,6 +1,11 @@
 import { autoSave } from "./event.js";
-
+//api 주소
 const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
+const HEADERS = {
+    "Content-Type": "application/json",
+    "x-username": "namedaf", // 고유한 사용자?
+  };
+
 const no_content = `
 <div class="welcome_box">
 <div>
@@ -12,20 +17,15 @@ const no_content = `
 </div>
 </div>
 `;
-
-const HEADERS = {
-  "Content-Type": "application/json",
-  "x-username": "namedaf", // 고유한 사용자?
-};
 let path_name = window.location.pathname;
 
+//라우터 경로설정
 const routes = {
   "/": () => no_content,
   "/contact": () => "<h1>Contact Page</h1><p>Get in touch with us here.</p>",
   "/post/:id": async (params) => {
+//동적 라우팅
   const currentDoc = await fetchDocumentById(params.id);
-
-  // 콘텐츠 렌더링
   const contentHtml = `<textarea>${currentDoc.content || ""}</textarea>`;
   const contentArea = document.querySelector(".main");
   const titleBox = document.querySelector(".title_box h2");

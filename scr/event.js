@@ -19,9 +19,8 @@ const HEADERS = {
 document.addEventListener("DOMContentLoaded", async () => {
   const contentArea = document.querySelector(".main");
   const addPageButton = document.querySelector(".add_box");
-  const welcomeBox = document.querySelector(".welcome_box");
 
-  if (!contentArea || !addPageButton || !welcomeBox) {
+  if (!contentArea || !addPageButton ) {
     console.error("필수 DOM 요소를 찾을 수 없습니다.");
     return;
   }
