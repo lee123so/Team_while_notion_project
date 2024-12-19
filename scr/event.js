@@ -201,7 +201,6 @@ let saveTimeout;
       content: textarea.value.trim(),
     };
     const data = await saveDocument(docId,updatedDoc);
-    console.log(data)
   }, 5000); 
   // 5초 뒤 저장
 }

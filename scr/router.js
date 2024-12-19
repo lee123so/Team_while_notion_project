@@ -33,7 +33,6 @@ const routes = {
     titleBox.textContent = currentDoc.title || "제목 없음";
     titleBox.dataset.id = params.id;
 
-    // 새 텍스트 영역을 만들어서 문서 내용 넣기
     const textarea = document.createElement("textarea");
     textarea.textContent = currentDoc.content || "";
 
