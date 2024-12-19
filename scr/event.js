@@ -1,6 +1,13 @@
 
 import { navigateTo } from "./router.js";
 import { renderSidebar, updateSidebarTitle } from "./sidebar.js";
+import { initializeDarkMode } from "./DarkMode.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  initializeDarkMode(); // 다크 모드 초기화
+  // 기존 로직 유지
+});
+
 
 const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
 const HEADERS = {
@@ -107,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newDoc = await createDocument("새 페이지");
     if (newDoc) {
       console.log("새 문서 생성:", newDoc);
-      await renderSidebar(); // renderSidebar() 가 비동기 함수이므로 기다려야 합니다.
+      renderSidebar();
       renderEditor(newDoc.id);
     }
   });
@@ -139,12 +146,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 // 새 문서 생성 함수
-const createDocument = async (title, parentDocId = null) => {
+const createDocument = async (title) => {
   try {
     const newDoc = {
       title: title || "새 문서",
       content: "",
-      parentId: parentDocId, // 하위 페이지의 경우 parentId 추가
     };
 
     const response = await fetch(API_BASE_URL, {
@@ -196,7 +202,7 @@ let saveTimeout;
     console.log(data)
   }, 5000); 
   // 5초 뒤 저장
-
+}
 
 // 문서 조회 함수
 const fetchDocumentById = async (docId) => {
@@ -216,4 +222,3 @@ const fetchDocumentById = async (docId) => {
   }
 
 };
-}
