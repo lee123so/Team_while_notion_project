@@ -202,16 +202,16 @@ a{
 }
 
 .menu ul li {
-    position: relative; /* 아이콘을 고정시킬 부모 요소에 상대적 위치를 설정 */
-    color: rgb(155, 155, 155);
-    user-select: none;
-    transition: background 150ms;
-    cursor: pointer;
-    border-radius: 6px;
-    display: flex;
-    margin-left: 0px;
-    margin-right: 0px;
-    font-weight: 500;
+position: relative; /* 아이콘을 고정시킬 부모 요소에 상대적 위치를 설정 */
+color: rgb(155, 155, 155);
+user-select: none;
+transition: background 150ms;
+cursor: pointer;
+border-radius: 6px;
+display: flex;
+margin-left: 0px;
+margin-right: 0px;
+font-weight: 500;
 }
 .menu ul li:hover{
     background-color: #444;
@@ -373,6 +373,19 @@ i{
     width: 400px;
 
   }
+
+.add_icon {
+  display: block; /* 반드시 보여야 하므로 display 속성 확인 */
+  cursor: pointer;
+  color: #666; /* 버튼 색상 */
+  font-size: 1rem; /* 아이콘 크기 */
+  margin-right: 25px;
+}
+
+.add_icon i {
+  display: inline-block;
+}
+
 
 .menu ul li:hover {
   background-color: #444;
