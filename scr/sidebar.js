@@ -101,7 +101,6 @@ const createMenuItem = (doc, parentId) => {
   return listItem;
 };
 
-
 // 문서 삭제 함수
 const deleteDocument = async (docId) => {
   try {
@@ -135,7 +134,7 @@ const deleteDocument = async (docId) => {
 export const updateSidebarTitle = (docId, newTitle) => {
   const sidebarItem = document.querySelector(`.menu_box[data-id="${docId}"]`);
   if (sidebarItem) {
-    const titleElement = sidebarItem.querySelector(".title");
+    const titleElement = sidebarItem.querySelector(".menu_text");
     if (titleElement) {
       titleElement.textContent = newTitle;
     }
@@ -185,10 +184,45 @@ const displayDocumentContent = async (docId) => {
 
     const doc = await response.json();
     contentArea.innerHTML = `
-      <h2 data-id="${doc.id}">${doc.title}</h2>
+      <h2 data-id="${doc.id}">
+        <input type="text" value="${doc.title}" class="doc-title-input" />
+      </h2>
     `;
+
+    // 제목 입력 필드에서 변경이 있을 때 사이드바 제목도 바로 업데이트
+    const titleInput = contentArea.querySelector(".doc-title-input");
+    titleInput.addEventListener("blur", async () => {
+      const newTitle = titleInput.value;
+      try {
+        // 제목 수정 요청을 서버에 보내고 성공하면 사이드바도 업데이트
+        await updateDocumentTitle(doc.id, newTitle);
+        updateSidebarTitle(doc.id, newTitle); // 사이드바 제목 바로 업데이트
+      } catch (error) {
+        console.error("제목 수정 중 오류 발생:", error);
+      }
+    });
+
   } catch (error) {
     console.error("문서 내용 표시 중 오류 발생:", error);
+  }
+};
+
+// 제목 수정 함수
+const updateDocumentTitle = async (docId, newTitle) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${docId}`, {
+      method: "PUT",
+      headers: HEADERS,
+      body: JSON.stringify({ title: newTitle }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`제목 수정 실패 (ID: ${docId})`);
+    }
+
+    console.log("제목 수정 성공");
+  } catch (error) {
+    console.error("제목 수정 중 오류 발생:", error);
   }
 };
 
