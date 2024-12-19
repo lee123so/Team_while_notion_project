@@ -1,3 +1,6 @@
+import { autoSave } from "./event.js";
+
+const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
 const no_content = `
 <div class="welcome_box">
 <div>
@@ -9,7 +12,7 @@ const no_content = `
 </div>
 </div>
 `;
-const API_BASE_URL = "https://kdt-api.fe.dev-cos.com/documents";
+
 const HEADERS = {
   "Content-Type": "application/json",
   "x-username": "namedaf", // 고유한 사용자?
@@ -20,12 +23,21 @@ const routes = {
   "/": () => no_content,
   "/contact": () => "<h1>Contact Page</h1><p>Get in touch with us here.</p>",
   "/post/:id": async (params) => {
-    const currentDoc = await fetchDocumentById(params.id);
-    const titleBox = document.querySelector(".title_box h2");
-    titleBox.innerHTML = currentDoc.title
-    
-    return `<textarea>${currentDoc.content || ""}</textarea>`;
-  },
+  const currentDoc = await fetchDocumentById(params.id);
+
+  // 콘텐츠 렌더링
+  const contentHtml = `<textarea>${currentDoc.content || ""}</textarea>`;
+  const contentArea = document.querySelector(".main");
+  const titleBox = document.querySelector(".title_box h2");
+  const textarea = contentArea.querySelector("textarea");
+  contentArea.innerHTML = contentHtml;
+  titleBox.textContent = currentDoc.title || "제목 없음";
+
+
+  titleBox.addEventListener("input", autoSave(params.id));
+  textarea.addEventListener("input", autoSave(params.id));
+  return contentHtml;
+},
 };
 
 // URL 경로에서 동적 매개변수 추출 함수
@@ -52,7 +64,6 @@ const parseRoute = (path) => {
 
 // 라우터 함수
 const router = async () => {
-    console.log(path_name)
   const { route, params } = parseRoute(path_name) || {};
   const content = document.querySelector("main");
   if (route && routes[route]) {
@@ -76,6 +87,7 @@ window.addEventListener("popstate", () => {
   path_name = window.location.pathname;
   router();
 });
+
 const fetchDocumentById = async (documentId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${documentId}`, {

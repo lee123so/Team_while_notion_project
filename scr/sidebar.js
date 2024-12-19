@@ -71,8 +71,8 @@ const renderSidebar = async () => {
         });
       });
 
-      // 기존 클릭 이벤트 유지
-      // listItem.addEventListener('click', () => renderEditor(doc.id));
+      // 기존 클릭 이벤트 삭제 (Router로 구현)
+      
       menuList.appendChild(listItem);
     });
   } catch (error) {

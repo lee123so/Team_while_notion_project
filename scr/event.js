@@ -145,3 +145,35 @@ document.addEventListener("DOMContentLoaded", async () => {
   //   renderEditor(documents[0].id);
   // }
 });
+
+const saveDocument = async (documentId, updatedDoc) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${documentId}`, {
+      method: "PUT",
+      headers: HEADERS,
+      body: JSON.stringify(updatedDoc),
+    });
+
+    if (!response.ok) {
+      throw new Error(`문서 저장 실패 (ID: ${documentId})`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("문서 저장 중 오류 발생:", error);
+  }
+};
+export const autoSave = (docId) => {
+const contentArea = document.querySelector(".main");
+const textarea = contentArea.querySelector("textarea");
+let saveTimeout;
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    const updatedDoc = {
+      content: textarea.value.trim(),
+    };
+    const data = await saveDocument(docId,updatedDoc);
+    console.log(data)
+  }, 5000); 
+  // 5초 뒤 저장
+};
