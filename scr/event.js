@@ -192,10 +192,12 @@ const saveDocument = async (docId, updatedDoc) => {
 export const autoSave = (docId) => {
 const contentArea = document.querySelector(".main");
 const textarea = contentArea.querySelector("textarea");
+const titlearea = contentArea.querySelector("h2")
 let saveTimeout;
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {
     const updatedDoc = {
+      title:titlearea.textContent.trim(),
       content: textarea.value.trim(),
     };
     const data = await saveDocument(docId,updatedDoc);

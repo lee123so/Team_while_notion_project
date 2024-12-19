@@ -115,7 +115,6 @@ section {
   font-style: normal;
 }
 body {
-
   line-height: 1;
   font-family: "Pretendard-Regular";
 
@@ -139,7 +138,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+a{
+    text-decoration: none;
+    color: inherit;
+}
 .inner {
   width: 100vw;
   height: 100vh;
