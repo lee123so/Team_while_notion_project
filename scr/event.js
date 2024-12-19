@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newDoc = await createDocument("새 페이지");
     if (newDoc) {
       console.log("새 문서 생성:", newDoc);
-      renderSidebar();
+      await renderSidebar(); // renderSidebar() 가 비동기 함수이므로 기다려야 합니다.
       renderEditor(newDoc.id);
     }
   });
@@ -134,11 +134,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // 새 문서 생성 함수
-const createDocument = async (title) => {
+const createDocument = async (title, parentDocId = null) => {
   try {
     const newDoc = {
       title: title || "새 문서",
       content: "",
+      parentId: parentDocId, // 하위 페이지의 경우 parentId 추가
     };
 
     const response = await fetch(API_BASE_URL, {

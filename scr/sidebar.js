@@ -6,7 +6,7 @@ const HEADERS = {
 
 const menuList = document.querySelector(".menu ul");
 
-// 사이드바 렌더링
+// 사이드바 렌더링 함수
 const renderSidebar = async () => {
   menuList.innerHTML = "";
 
@@ -61,24 +61,28 @@ const renderSidebar = async () => {
         }
       });
 
-      menuList.appendChild(listItem);
-
       // 메뉴 클릭 시 하위 메뉴 토글
       const menuBox = listItem.querySelector(".menu_box");
-      menuBox.addEventListener("click", () => {
-        const icon = menuBox.querySelector(".icon");
-        const isOpen = subMenu.style.display === "block";
+      menuBox.addEventListener("click", () => toggleSubMenu(menuBox, subMenu));
 
-        // 하위 메뉴 토글
-        subMenu.style.display = isOpen ? "none" : "block";
-        icon.innerHTML = isOpen
-          ? '<i class="fa-duotone fa-solid fa-angle-right"></i>' // 화살표가 오른쪽으로 표시
-          : '<i class="fa-duotone fa-solid fa-angle-down"></i>'; // 화살표가 아래로 표시
-      });
+      menuList.appendChild(listItem);
     });
+
   } catch (error) {
     console.error("사이드바 렌더링 중 오류 발생:", error);
   }
+};
+
+// 메뉴 클릭 시 하위 메뉴 토글 함수
+const toggleSubMenu = (menuBox, subMenu) => {
+  const icon = menuBox.querySelector(".icon");
+  const isOpen = subMenu.style.display === "block";
+
+  // 하위 메뉴 토글
+  subMenu.style.display = isOpen ? "none" : "block";
+  icon.innerHTML = isOpen
+    ? '<i class="fa-duotone fa-solid fa-angle-right"></i>' // 화살표가 오른쪽으로 표시
+    : '<i class="fa-duotone fa-solid fa-angle-down"></i>'; // 화살표가 아래로 표시
 };
 
 // 문서 삭제 함수
@@ -129,7 +133,15 @@ const createNewPage = async (parentId, title) => {
 
     const newDoc = await response.json();
     console.log("새 페이지 생성 성공:", newDoc);
-    await renderSidebar(); // 사이드바 갱신
+
+    // 새 페이지가 추가되었으면 사이드바 갱신
+    await renderSidebar();
+
+    // 하위 메뉴 추가
+    if (parentId) {
+      addSubMenu(parentId, newDoc); // 상위 페이지가 있다면 하위 페이지로 추가
+    }
+
   } catch (error) {
     console.error("새 페이지 생성 중 오류 발생:", error);
   }
@@ -162,4 +174,49 @@ const updateSidebarTitle = async (docId, newTitle) => {
   }
 };
 
-export { renderSidebar, deleteDocument, createNewPage, updateSidebarTitle };
+// 페이지 이름을 클릭 시 하위 페이지를 자동으로 추가
+const addSubMenu = (parentId, subDocument) => {
+  const parentMenuItem = menuList.querySelector(`.menu_box[data-id="${parentId}"]`);
+  if (parentMenuItem) {
+    const subMenu = parentMenuItem.nextElementSibling; // .sub-menu
+    const subItem = document.createElement("li");
+    subItem.innerHTML = `
+      <div class="menu_box" data-id="${subDocument.id}">
+        <div class="icon"><i class="fa-duotone fa-solid fa-angle-right"></i></div>
+        <div class="menu_text">${subDocument.title || "제목 없음"}</div>
+        <div class="delete_icon"><i class="fa-solid fa-trash"></i></div>
+      </div>
+    `;
+    subMenu.appendChild(subItem);
+
+    // 하위 메뉴 클릭 시 내용 표시
+    subItem.querySelector(".menu_box").addEventListener("click", () => {
+      displayDocumentContent(subDocument.id);
+    });
+  }
+};
+
+// 문서 내용 표시 함수 (예시)
+const displayDocumentContent = async (docId) => {
+  const contentArea = document.querySelector(".main");
+  try {
+    const response = await fetch(`${API_BASE_URL}/${docId}`, {
+      method: "GET",
+      headers: HEADERS,
+    });
+
+    if (!response.ok) {
+      throw new Error(`문서 내용 조회 실패 (ID: ${docId})`);
+    }
+
+    const doc = await response.json();
+    contentArea.innerHTML = `
+      <h2 data-id="${doc.id}">${doc.title}</h2>
+      <div class="content">${doc.content || "내용 없음"}</div>
+    `;
+  } catch (error) {
+    console.error("문서 내용 표시 중 오류 발생:", error);
+  }
+};
+
+export { renderSidebar, deleteDocument, createNewPage, updateSidebarTitle, addSubMenu, displayDocumentContent };
