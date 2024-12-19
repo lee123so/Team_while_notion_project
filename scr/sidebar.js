@@ -61,28 +61,11 @@ const renderSidebar = async () => {
         }
       });
 
-      // 메뉴 클릭 시 하위 메뉴 토글
-      const menuBox = listItem.querySelector(".menu_box");
-      menuBox.addEventListener("click", () => toggleSubMenu(menuBox, subMenu));
-
       menuList.appendChild(listItem);
     });
-
   } catch (error) {
     console.error("사이드바 렌더링 중 오류 발생:", error);
   }
-};
-
-// 메뉴 클릭 시 하위 메뉴 토글 함수
-const toggleSubMenu = (menuBox, subMenu) => {
-  const icon = menuBox.querySelector(".icon");
-  const isOpen = subMenu.style.display === "block";
-
-  // 하위 메뉴 토글
-  subMenu.style.display = isOpen ? "none" : "block";
-  icon.innerHTML = isOpen
-    ? '<i class="fa-duotone fa-solid fa-angle-right"></i>' // 화살표가 오른쪽으로 표시
-    : '<i class="fa-duotone fa-solid fa-angle-down"></i>'; // 화살표가 아래로 표시
 };
 
 // 문서 삭제 함수
@@ -141,7 +124,6 @@ const createNewPage = async (parentId, title) => {
     if (parentId) {
       addSubMenu(parentId, newDoc); // 상위 페이지가 있다면 하위 페이지로 추가
     }
-
   } catch (error) {
     console.error("새 페이지 생성 중 오류 발생:", error);
   }
@@ -176,7 +158,9 @@ const updateSidebarTitle = async (docId, newTitle) => {
 
 // 페이지 이름을 클릭 시 하위 페이지를 자동으로 추가
 const addSubMenu = (parentId, subDocument) => {
-  const parentMenuItem = menuList.querySelector(`.menu_box[data-id="${parentId}"]`);
+  const parentMenuItem = menuList.querySelector(
+    `.menu_box[data-id="${parentId}"]`
+  );
   if (parentMenuItem) {
     const subMenu = parentMenuItem.nextElementSibling; // .sub-menu
     const subItem = document.createElement("li");
@@ -219,4 +203,11 @@ const displayDocumentContent = async (docId) => {
   }
 };
 
-export { renderSidebar, deleteDocument, createNewPage, updateSidebarTitle, addSubMenu, displayDocumentContent };
+export {
+  renderSidebar,
+  deleteDocument,
+  createNewPage,
+  updateSidebarTitle,
+  addSubMenu,
+  displayDocumentContent,
+};
