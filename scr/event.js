@@ -24,15 +24,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: "DELETE",
         headers: HEADERS,
       });
-  
+
       if (!response.ok) {
         throw new Error(`문서 삭제 실패 (ID: ${docId})`);
       }
-  
+
       console.log("문서 삭제 성공");
       await renderSidebar();
-  
-       // 문서가 삭제 될때 main textarea 도 같이 삭제 되게 
+
+      // 문서가 삭제 될때 main textarea 도 같이 삭제 되게
       const titleBox = document.querySelector(".main h2");
       if (titleBox && titleBox.dataset.id === docId) {
         const contentArea = document.querySelector(".main");
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("문서 삭제 중 오류 발생:", error);
     }
   };
-  
+
   // 문서 내용 렌더링
   const renderEditor = async (docId) => {
     const currentDoc = await fetchDocumentById(docId);
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
         await saveDocument(docId, updatedDoc);
         updateSidebarTitle(docId, titleBox.textContent.trim());
-      }, 5000); // 5초 뒤 저장
+      }, 3000); // 3초 뒤 저장
     };
 
     // 제목 및 내용 변경 이벤트 추가
@@ -110,8 +110,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // 사이드바 클릭 시 해당 문서 내용 렌더링
-  document.querySelector('.menu ul').addEventListener('click', (event) => {
-    const menuBox = event.target.closest('.menu_box');
+  document.querySelector(".menu ul").addEventListener("click", (event) => {
+    const menuBox = event.target.closest(".menu_box");
     if (menuBox) {
       const docId = menuBox.dataset.id;
       if (docId) {

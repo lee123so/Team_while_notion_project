@@ -24,13 +24,32 @@ const renderSidebar = async () => {
 
     documents.forEach((doc) => {
       const listItem = document.createElement("li");
+      listItem.classList.add("menu-item");
       listItem.innerHTML = `
         <div class="menu_box" data-id="${doc.id}">
           <div class="icon"><i class="fa-duotone fa-solid fa-angle-right"></i></div>
           <div class="menu_text">${doc.title || "제목 없음"}</div>
           <div class="delete_icon"><i class="fa-solid fa-trash"></i></div>
         </div>
+        <ul class="sub-menu" style="display: none;"></ul> <!-- 하위 페이지 영역 -->
       `;
+
+      const subMenu = listItem.querySelector(".sub-menu");
+
+      // 하위 문서가 있으면 추가
+      if (doc.subDocuments && doc.subDocuments.length > 0) {
+        doc.subDocuments.forEach((subDoc) => {
+          const subItem = document.createElement("li");
+          subItem.innerHTML = `
+            <div class="menu_box" data-id="${subDoc.id}">
+              <div class="icon"><i class="fa-duotone fa-solid fa-angle-right"></i></div>
+              <div class="menu_text">${subDoc.title || "제목 없음"}</div>
+              <div class="delete_icon"><i class="fa-solid fa-trash"></i></div>
+            </div>
+          `;
+          subMenu.appendChild(subItem);
+        });
+      }
 
       // 삭제 아이콘 클릭 시 문서 삭제
       const deleteIcon = listItem.querySelector(".delete_icon");
@@ -43,32 +62,22 @@ const renderSidebar = async () => {
       });
 
       menuList.appendChild(listItem);
+
+      // 메뉴 클릭 시 하위 메뉴 토글
+      const menuBox = listItem.querySelector(".menu_box");
+      menuBox.addEventListener("click", () => {
+        const icon = menuBox.querySelector(".icon");
+        const isOpen = subMenu.style.display === "block";
+
+        // 하위 메뉴 토글
+        subMenu.style.display = isOpen ? "none" : "block";
+        icon.innerHTML = isOpen
+          ? '<i class="fa-duotone fa-solid fa-angle-right"></i>' // 화살표가 오른쪽으로 표시
+          : '<i class="fa-duotone fa-solid fa-angle-down"></i>'; // 화살표가 아래로 표시
+      });
     });
   } catch (error) {
     console.error("사이드바 렌더링 중 오류 발생:", error);
-  }
-};
-
-// 사이드바 항목 클릭 이벤트 (전역 리스너)
-menuList.addEventListener("click", (event) => {
-  const menuBox = event.target.closest(".menu_box");
-  if (menuBox) {
-    const docId = menuBox.dataset.id;
-    if (docId) {
-      renderEditor(docId);
-    } else {
-      console.error("문서 ID가 없습니다.");
-    }
-  }
-});
-
-// 문서 제목 업데이트
-const updateSidebarTitle = (docId, newTitle) => {
-  const sidebarItem = menuList.querySelector(
-    `.menu_box[data-id="${docId}"] .menu_text`
-  );
-  if (sidebarItem) {
-    sidebarItem.textContent = newTitle || "제목 없음";
   }
 };
 
@@ -102,4 +111,55 @@ const deleteDocument = async (docId) => {
   }
 };
 
-export { renderSidebar, updateSidebarTitle };
+// 새 페이지 생성 함수
+const createNewPage = async (parentId, title) => {
+  try {
+    const response = await fetch(API_BASE_URL, {
+      method: "POST",
+      headers: HEADERS,
+      body: JSON.stringify({
+        title: title,
+        parentId: parentId || null, // 상위 페이지가 있으면 부모 ID 전달
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("새 페이지 생성 실패");
+    }
+
+    const newDoc = await response.json();
+    console.log("새 페이지 생성 성공:", newDoc);
+    await renderSidebar(); // 사이드바 갱신
+  } catch (error) {
+    console.error("새 페이지 생성 중 오류 발생:", error);
+  }
+};
+
+// 문서 제목 업데이트 함수
+const updateSidebarTitle = async (docId, newTitle) => {
+  const sidebarItem = menuList.querySelector(
+    `.menu_box[data-id="${docId}"] .menu_text`
+  );
+  if (sidebarItem) {
+    const updatedTitle = newTitle.trim() || "제목 없음"; // 제목이 비어 있으면 기본값 설정
+    sidebarItem.textContent = updatedTitle;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/${docId}`, {
+        method: "PUT", // PATCH 대신 PUT 사용
+        headers: HEADERS,
+        body: JSON.stringify({ title: updatedTitle }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`문서 제목 업데이트 실패 (ID: ${docId})`);
+      }
+
+      console.log("문서 제목 업데이트 성공:", updatedTitle);
+    } catch (error) {
+      console.error("문서 제목 업데이트 중 오류 발생:", error);
+    }
+  }
+};
+
+export { renderSidebar, deleteDocument, createNewPage, updateSidebarTitle };
