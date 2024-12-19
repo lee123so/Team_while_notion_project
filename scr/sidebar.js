@@ -61,8 +61,21 @@ const renderSidebar = async () => {
         }
       });
 
-    
+
       menuList.appendChild(listItem);
+
+      // 메뉴 클릭 시 하위 메뉴 토글
+      const menuBox = listItem.querySelector(".menu_box");
+      menuBox.addEventListener("click", () => {
+        const icon = menuBox.querySelector(".icon");
+        const isOpen = subMenu.style.display === "block";
+
+        // 하위 메뉴 토글
+        subMenu.style.display = isOpen ? "none" : "block";
+        icon.innerHTML = isOpen
+          ? '<i class="fa-duotone fa-solid fa-angle-right"></i>' // 화살표가 오른쪽으로 표시
+          : '<i class="fa-duotone fa-solid fa-angle-down"></i>'; // 화살표가 아래로 표시
+      });
     });
   } catch (error) {
     console.error("사이드바 렌더링 중 오류 발생:", error);
@@ -117,14 +130,7 @@ const createNewPage = async (parentId, title) => {
 
     const newDoc = await response.json();
     console.log("새 페이지 생성 성공:", newDoc);
-
-    // 새 페이지가 추가되었으면 사이드바 갱신
-    await renderSidebar();
-
-    // 하위 메뉴 추가
-    if (parentId) {
-      addSubMenu(parentId, newDoc); // 상위 페이지가 있다면 하위 페이지로 추가
-    }
+    await renderSidebar(); // 사이드바 갱신
   } catch (error) {
     console.error("새 페이지 생성 중 오류 발생:", error);
   }
@@ -212,3 +218,4 @@ export {
   addSubMenu,
   displayDocumentContent,
 };
+

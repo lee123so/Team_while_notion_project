@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 사이드바 클릭 시 해당 문서 내용 렌더링
 
+
   document.querySelector(".menu ul").addEventListener("click",async (event) => {
     const menuBox = event.target.closest(".menu_box");
     if (menuBox) {
